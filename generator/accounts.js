@@ -21,8 +21,3 @@ const normalDecims = new BN(api.registry.chainDecimals);
 const normalFactor = new BN(10).pow(normalDecims);
 const normalTransferAmount = new BN(1).mul(normalFactor);
 
-// export {
-//     //createAccount
-//     // initialTransferAmount,
-//     // normalTransferAmount
-// }
