@@ -26,7 +26,7 @@ async function main() {
             }
             //if (event.method.method == 'transfer') txnCounter++
         });
-        logger.info(`${txnCounter} transactions in finalized in block: #${header.number}`);
+        logger.info(`${txnCounter} transactions finalized in block: #${header.number}`);
         if (++count === 256) {
             unsubscribe();
             process.exit(0);
