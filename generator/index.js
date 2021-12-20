@@ -24,7 +24,9 @@ let no_accounts_per_grid = process.env.no_accounts_per_grid;
 async function createAccounts() {
   // Retrieve the chain & node information information via rpc calls
   // Initialise the provider to connect to the local node
+  console.log(process.env.ws_node)
   provider = new WsProvider(process.env.ws_node);
+
   // Create the API and wait until ready
   api = await ApiPromise.create({ provider });
   const [chain, nodeName, nodeVersion] = await Promise.all([
@@ -43,6 +45,7 @@ async function createAccounts() {
   }
 }
 async function main() {
+  console.log("Test....")
   // Create test accounts
   await createAccounts();
   //const test1Account = createAccount();
@@ -61,8 +64,8 @@ async function main() {
 
   // Transfering initial amount to test accounts
   //testAccountArr.forEach(async (element) => {
-  for (const element of testAccountArr) {
-    for (let [key, value] of (element)) {
+  for (const grid of testAccountArr) {
+    for (let [key, value] of (grid)) {
       const transfer = api.tx.balances.transfer(value.account.address, initialTransferAmount);
       const { partialFee } = await transfer.paymentInfo(value.account.address);
       const fees = partialFee.muln(110).divn(100);
@@ -104,6 +107,7 @@ async function transferBetweenGrids() {
   source.set('sudoAccount', sudoAccount);
   for (const target of testAccountArr) {
     for (let [sourceKey, SourceAccount] of (source)) {
+      let nonce = await api.rpc.system.accountNextIndex(SourceAccount.account.address);
       //logger.info(SourceAccount.account.address)
       for (let [targetKey, targetAccount] of (target)) {
         //logger.info(targetAccount.account.address);
@@ -119,8 +123,13 @@ async function transferBetweenGrids() {
           );
         }
         else {
-          const nonce = await api.rpc.system.accountNextIndex(SourceAccount.account.address);
-          const tx = await transfer.signAndSend(SourceAccount.account, { nonce });
+          //const nonce = await api.rpc.system.accountNextIndex(SourceAccount.account.address);
+          try {
+            const tx = await transfer.signAndSend(SourceAccount.account, { nonce });
+            nonce = nonce.add(new BN(1));
+          } catch (err) {
+            console.error(err);
+          }
           logger.info(`${sourceKey} ==> ${targetKey}`);
           //   logger.info(`Transfered to ${targetKey} amount ${normalTransferAmount};Timestamp ${new Date().toString()};Transfer: ${tx}; `);
         }

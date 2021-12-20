@@ -1,10 +1,12 @@
 // Import the API
+require('dotenv').config();
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 const { listnerLogger: logger } = require('../utils/logger');
 async function main() {
     // Here we don't pass the (optional) provider, connecting directly to the default
     // node/port, i.e. `ws://127.0.0.1:9944`. Await for the isReady promise to ensure
     // the API has connected to the node and completed the initialisation process
+    //console("node:" + process.env.ws_node);
     provider = new WsProvider(process.env.ws_node);
     const api = await ApiPromise.create({ provider });
     let count = 0;
@@ -14,7 +16,8 @@ async function main() {
 
     const unsubscribe = await api.rpc.chain.subscribeFinalizedHeads(async (header) => {
         logger.info(`Chain is at finalized block: #${header.number}`);
-        const blockHash = await api.rpc.chain.getBlockHash(42648);
+        const blockHash = await api.rpc.chain.getBlockHash(header.number);
+
         const signedBlock = await api.rpc.chain.getBlock(blockHash);
         let txnCounter = 0;
         signedBlock.block.extrinsics.forEach((ex, index) => {
