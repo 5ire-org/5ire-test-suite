@@ -18,6 +18,7 @@ let fireArr = new Map();
 let waterArr = new Map();
 let earthArr = new Map();
 let testAccountArr = [spaceArr, airArr, fireArr, waterArr, earthArr];
+let testAccountArrRev = [earthArr, waterArr, fireArr, airArr, spaceArr];
 let normalTransferAmount;
 let no_transfer_between_acounts = process.env.no_transfer_between_acounts;
 let no_accounts_per_grid = process.env.no_accounts_per_grid;
@@ -85,7 +86,8 @@ async function main() {
   }
   sleep(process.env.sleep_sudo_transfer);
   for (let l = 0; l < no_transfer_between_acounts; l++) {
-    await transferBetweenGrids();
+    await transferBetweenGrids(testAccountArr);
+    await transferBetweenGrids(testAccountArrRev);
   }
 }
 
@@ -102,10 +104,10 @@ function createAccount(mnemonic) {
 }
 
 // Transfer between the Grids
-async function transferBetweenGrids() {
+async function transferBetweenGrids(testAccountArrLocal) {
   let source = new Map();
   source.set('sudoAccount', sudoAccount);
-  for (const target of testAccountArr) {
+  for (const target of testAccountArrLocal) {
     for (let [sourceKey, SourceAccount] of (source)) {
       let nonce = await api.rpc.system.accountNextIndex(SourceAccount.account.address);
       //logger.info(SourceAccount.account.address)
