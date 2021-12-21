@@ -26,6 +26,7 @@ async function createAccounts() {
   // Retrieve the chain & node information information via rpc calls
   // Initialise the provider to connect to the local node
   console.log(process.env.ws_node)
+  console.log(process.env.bank)
   provider = new WsProvider(process.env.ws_node);
 
   // Create the API and wait until ready
@@ -36,7 +37,8 @@ async function createAccounts() {
     api.rpc.system.version()
   ]);
   logger.info(`Connected to chain ${chain} using ${nodeName} v${nodeVersion}`);
-  sudoAccount = createAccount(process.env.sudo_seed);
+
+  sudoAccount = createAccount(process.env.bank);
   for (let i = 1; i < no_accounts_per_grid; i++) {
     spaceArr.set('spaceAccount' + i, createAccount());
     airArr.set('airAccount' + i, createAccount());
@@ -84,6 +86,7 @@ async function main() {
       }
     }
   }
+
   sleep(process.env.sleep_sudo_transfer);
   for (let l = 0; l < no_transfer_between_acounts; l++) {
     await transferBetweenGrids(testAccountArr);
