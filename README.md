@@ -26,7 +26,7 @@ To get started -
 3. Install the dependencies by running npm install.
 4. To load the transaction to chain run `npm run generator --wsnode="" --bank=""`.
 5. To Listen to chain and to find the transaction per block run `npm run listener --wsnode=""`.
- Note: --bank is the seed for the sudo or test account which has the funds.
+Note: --bank is the seed for the sudo or test account which has the funds.
 ## Environment Variables.
   Below you can parameterize the Test Suit variables in .env file.
   1. tranafer_from_sudo => Amount of tokens transfer to each Test account
