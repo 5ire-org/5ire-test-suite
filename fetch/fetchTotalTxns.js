@@ -14,9 +14,6 @@ async function main() {
     let totalTransactions = 0;
     let MaxNoTxnsBlock = 0;
     let presentBlocknumber = 0;
-    // Subscribe to the new headers on-chain. The callback is fired when new headers
-    // are found, the call itself returns a promise with a subscription that can be
-    // used to unsubscribe from the newHead subscription
     for (let i = presentBlocknumber; i > 1; i--) {
         const blockHash = await api.rpc.chain.getBlockHash(i);
         const signedBlock = await api.rpc.chain.getBlock(blockHash);

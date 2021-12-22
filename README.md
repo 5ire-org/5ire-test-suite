@@ -24,16 +24,14 @@ To get started -
 1. Clone the repo locally, via `git clone https://github.com/5ire-org/5ire-test-suit <optional local path>`.
 2. Ensure that you have a recent LTS version of Node.js, for development purposes [Node >=10.13.0](https://nodejs.org/en/) is recommended.
 3. Install the dependencies by running npm install.
-4. To load the transaction to chain run `npm run generator`.
-5. To Listen to chain and to find the transaction per block run `npm run listener`.
-
+4. To load the transaction to chain run `npm run generator --wsnode="" --bank=""`.
+5. To Listen to chain and to find the transaction per block run `npm run listener --wsnode=""`.
+ Note: --bank is the seed for the sudo or test account which has the funds.
 ## Environment Variables.
   Below you can parameterize the Test Suit variables in .env file.
-  1. ws_node => Node Url (ex: "ws://127.0.0.1:9944")
-  2. sudo_seed => Either sudo or any other Test account seed.
-  3. tranafer_from_sudo => Amount of tokens transfer to each Test account
-  4. transfer_between_acounts => Number of tokens transfer between tetst accounts.
-  5. sleep_sudo_transfer => Sleep time to finalize the initial transfer from sudo\Test account.
-  6. no_transfer_between_acounts => Number of transfers between test accounts.
-  7. no_accounts_per_grid => Number of test accounts in each Grid.
+  1. tranafer_from_sudo => Amount of tokens transfer to each Test account
+  2. transfer_between_acounts => Number of tokens transfer between tetst accounts.
+  3. sleep_sudo_transfer => Sleep time to finalize the initial transfer from sudo\Test account.
+  4. no_transfer_between_acounts => Number of transfers between test accounts.
+  5. no_accounts_per_grid => Number of test accounts in each Grid.
   
