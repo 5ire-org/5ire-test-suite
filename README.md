@@ -25,7 +25,7 @@ To get started -
 2. Ensure that you have a recent LTS version of Node.js, for development purposes [Node >=10.13.0](https://nodejs.org/en/) is recommended.
 3. Install the dependencies by running npm install.
 4. To load the transaction to chain run `npm run generator --wsnode="" --bank=""`.  
-Note: --bank is the seed for the sudo or test account which has the funds.
+Note: --bank is the seed for the sudo or test account which has the funds..
 5. To Listen to chain and to find the transaction per block run `npm run listener --wsnode=""`.
 
 ## Environment Variables.
