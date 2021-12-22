@@ -24,9 +24,10 @@ To get started -
 1. Clone the repo locally, via `git clone https://github.com/5ire-org/5ire-test-suit <optional local path>`.
 2. Ensure that you have a recent LTS version of Node.js, for development purposes [Node >=10.13.0](https://nodejs.org/en/) is recommended.
 3. Install the dependencies by running npm install.
-4. To load the transaction to chain run `npm run generator --wsnode="" --bank=""`.
-5. To Listen to chain and to find the transaction per block run `npm run listener --wsnode=""`.
+4. To load the transaction to chain run `npm run generator --wsnode="" --bank=""`.  
 Note: --bank is the seed for the sudo or test account which has the funds.
+5. To Listen to chain and to find the transaction per block run `npm run listener --wsnode=""`.
+
 ## Environment Variables.
   Below you can parameterize the Test Suit variables in .env file.
   1. tranafer_from_sudo => Amount of tokens transfer to each Test account
