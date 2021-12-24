@@ -1,4 +1,4 @@
-# 5ire-test-suit
+# 5ire-test-suite
 
 The test suit which consists of a Transaction generator and Transaction listener.
 Tool will be used to find the TPS fir 5IRE chain. 
@@ -18,7 +18,7 @@ Tool will be used to find the TPS fir 5IRE chain.
  ![image](https://user-images.githubusercontent.com/91786271/144530759-1f278843-e57a-48fd-bf84-13cdde8c2eeb.png)
 
 
-## Run Test Suit
+## Run Test Suite
 
 To get started -
 1. Clone the repo locally, via `git clone https://github.com/5ire-org/5ire-test-suit <optional local path>`.

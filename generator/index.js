@@ -70,7 +70,9 @@ async function main() {
   for (const grid of testAccountArr) {
     for (let [key, value] of (grid)) {
       const transfer = api.tx.balances.transfer(value.account.address, initialTransferAmount);
-      const { partialFee } = await transfer.paymentInfo(value.account.address);
+      const { partialFee, weight } = await transfer.paymentInfo(value.account.address);
+
+
       const fees = partialFee.muln(110).divn(100);
       const total = initialTransferAmount.add(fees).add(api.consts.balances.existentialDeposit);
       if (total.gt(available)) {
@@ -82,6 +84,8 @@ async function main() {
         const nonce = await api.rpc.system.accountNextIndex(sudoAccount.account.address);
         const tx = await transfer.signAndSend(sudoAccount.account, { nonce });
         //logger.info(`Transfered to ${key} - ${value.account.address} amount ${initialTransferAmount}; Transfer: ${tx}; `);
+        logger.info(`partialFee: ${partialFee}`);
+        logger.info(`weight: ${weight}`);
         logger.info(`Transfered to ${key} - ${value.account.address}; Transfer: ${tx};`);
       }
     }

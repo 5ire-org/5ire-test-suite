@@ -13,13 +13,16 @@ async function main() {
     let count = 0;
     let totalTransactions = 0;
     let MaxNoTxnsBlock = 0;
-    let presentBlocknumber = 0;
-    for (let i = presentBlocknumber; i > 1; i--) {
+    let presentBlocknumber = 4233;
+    for (let i = presentBlocknumber; i > 4231; i--) {
         const blockHash = await api.rpc.chain.getBlockHash(i);
         const signedBlock = await api.rpc.chain.getBlock(blockHash);
         let blockTxs = 0;
         signedBlock.block.extrinsics.forEach((ex, index) => {
+            logger.info("event:data:" + JSON.stringify(ex.data));
+            logger.info("event:hash:" + JSON.stringify(ex.hash.toHuman));
             let event = ex.toHuman();
+            logger.info("event:" + JSON.stringify(event));
             if (event.isSigned) {
                 blockTxs++
             }
