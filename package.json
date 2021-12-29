@@ -4,8 +4,9 @@
   "description": "Test suit for 5IRE chain benchmarking and performance metrics",
   "main": "index.js",
   "scripts": {
-    "generator": "node generator/index.js",
-    "listen": "node listner/chainListner.js",
+    "generator": "ws_node=$npm_config_wsnode bank=$npm_config_bank node generator/index.js",
+    "listen": "ws_node=$npm_config_wsnode node listner/chainListner.js",
+    "fetchTotalTxns": "ws_node=$npm_config_wsnode node fetch/fetchTotalTxns.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
