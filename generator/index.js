@@ -1,16 +1,28 @@
 // Required imports
 require('dotenv').config();
-const { genLogger: logger } = require('../utils/logger');
+const {
+  genLogger: logger
+} = require('../utils/logger');
 
-const { ApiPromise, WsProvider } = require('@polkadot/api');
-const { Keyring } = require('@polkadot/keyring');
+const {
+  ApiPromise,
+  WsProvider
+} = require('@polkadot/api');
+const {
+  Keyring
+} = require('@polkadot/keyring');
 //const { createAccount, initialTransferAmount, normalTransferAmount } = require('./accounts')
 const {
   mnemonicGenerate,
   mnemonicValidate
 } = require('@polkadot/util-crypto');
 const BN = require('bn.js');
-const keyring = new Keyring({ type: 'sr25519' });
+const {
+  error
+} = require('winston');
+const keyring = new Keyring({
+  type: 'sr25519'
+});
 let provider, api, sudoAccount;
 let spaceArr = new Map();
 let airArr = new Map();
@@ -26,11 +38,12 @@ async function createAccounts() {
   // Retrieve the chain & node information information via rpc calls
   // Initialise the provider to connect to the local node
   console.log(process.env.ws_node)
-  console.log(process.env.bank)
   provider = new WsProvider(process.env.ws_node);
 
   // Create the API and wait until ready
-  api = await ApiPromise.create({ provider });
+  api = await ApiPromise.create({
+    provider
+  });
   const [chain, nodeName, nodeVersion] = await Promise.all([
     api.rpc.system.chain(),
     api.rpc.system.name(),
@@ -48,7 +61,6 @@ async function createAccounts() {
   }
 }
 async function main() {
-  console.log("Test....")
   // Create test accounts
   await createAccounts();
   //const test1Account = createAccount();
@@ -58,7 +70,7 @@ async function main() {
   const initialTransferAmount = new BN(process.env.tranafer_from_sudo).mul(factor);
 
   // Build Normal transfer amount
-  const normalDecims = new BN(api.registry.chainDecimals);
+  const normalDecims = new BN(api.registry.chainDecimals - 9);
   const normalFactor = new BN(10).pow(normalDecims);
   normalTransferAmount = new BN(process.env.transfer_between_acounts).mul(normalFactor);
 
@@ -70,7 +82,10 @@ async function main() {
   for (const grid of testAccountArr) {
     for (let [key, value] of (grid)) {
       const transfer = api.tx.balances.transfer(value.account.address, initialTransferAmount);
-      const { partialFee, weight } = await transfer.paymentInfo(value.account.address);
+      const {
+        partialFee,
+        weight
+      } = await transfer.paymentInfo(value.account.address);
 
 
       const fees = partialFee.muln(110).divn(100);
@@ -79,14 +94,14 @@ async function main() {
         logger.error(
           `Cannot transfer ${initialTransferAmount} with ${available} left to ${key}`
         );
-      }
-      else {
+      } else {
         const nonce = await api.rpc.system.accountNextIndex(sudoAccount.account.address);
-        const tx = await transfer.signAndSend(sudoAccount.account, { nonce });
+        const tx = await transfer.signAndSend(sudoAccount.account, {
+          nonce
+        });
         //logger.info(`Transfered to ${key} - ${value.account.address} amount ${initialTransferAmount}; Transfer: ${tx}; `);
-        logger.info(`partialFee: ${partialFee}`);
-        logger.info(`weight: ${weight}`);
-        logger.info(`Transfered to ${key} - ${value.account.address}; Transfer: ${tx};`);
+
+        logger.info(`initialTransferAmount: ${initialTransferAmount}, Transfered to ${key} - ${value.account.address}; Transfer: ${tx};`);
       }
     }
   }
@@ -98,16 +113,19 @@ async function main() {
   }
 }
 
-main().catch(logger.error).finally(() => process.exit());
+main().catch(console.error).finally(() => process.exit());
 
 // Creates test account.
 function createAccount(mnemonic) {
-  mnemonic = mnemonic && mnemonicValidate(mnemonic)
-    ? mnemonic
-    : mnemonicGenerate();
+  mnemonic = mnemonic && mnemonicValidate(mnemonic) ?
+    mnemonic :
+    mnemonicGenerate();
   const account = keyring.addFromMnemonic(mnemonic);
   // logger.info(`Addr: ${account.address}- ${mnemonic}`)
-  return { account, mnemonic };
+  return {
+    account,
+    mnemonic
+  };
 }
 
 // Transfer between the Grids
@@ -123,19 +141,23 @@ async function transferBetweenGrids(testAccountArrLocal) {
         const balance = await api.derive.balances.all(SourceAccount.account.address);
         const available = balance.availableBalance;
         const transfer = api.tx.balances.transfer(targetAccount.account.address, normalTransferAmount);
-        const { partialFee } = await transfer.paymentInfo(targetAccount.account.address);
+        const {
+          partialFee
+        } = await transfer.paymentInfo(targetAccount.account.address);
         const fees = partialFee.muln(110).divn(100);
         const total = normalTransferAmount.add(fees).add(api.consts.balances.existentialDeposit);
         if (total.gt(available)) {
           logger.error(
             `Cannot transfer from ${sourceKey} - ${normalTransferAmount} with ${available} left to ${targetKey}`
           );
-        }
-        else {
+        } else {
           //const nonce = await api.rpc.system.accountNextIndex(SourceAccount.account.address);
           try {
-            const tx = await transfer.signAndSend(SourceAccount.account, { nonce });
+            const tx = await transfer.signAndSend(SourceAccount.account, {
+              nonce
+            });
             nonce = nonce.add(new BN(1));
+            logger.info(`Transfer Amount: ${total}`);
           } catch (err) {
             console.error(err);
           }
