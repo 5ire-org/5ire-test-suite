@@ -1,10 +1,4 @@
-# 5ire-test-suite
-
-The test suit which consists of a Transaction generator and Transaction listener.
-Tool will be used to find the TPS fir 5IRE chain. 
-  It contains 2 components <br> 
-  1) Transaction Generator - load the chain with transactions <br>
-  2) Transaction Listner - Listner which listens the number of transactions per block.
+# 5ire-test-suite-transaction-generator
 
 **Architectureal view**
 
